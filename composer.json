@@ -1,0 +1,16 @@
+{
+    "name": "tomsgrinbergs/reqres-sdk",
+    "description": "Reqres SDK",
+    "autoload": {
+        "psr-4": {
+            "Tomsgrinbergs\\ReqresSdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Toms Grinbergs",
+            "email": "toms.grinbergs.lv@gmail.com"
+        }
+    ],
+    "require": {}
+}
