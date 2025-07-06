@@ -3,7 +3,8 @@
     "description": "Reqres SDK",
     "autoload": {
         "psr-4": {
-            "Tomsgrinbergs\\ReqresSdk\\": "src/"
+            "Tomsgrinbergs\\ReqresSdk\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -14,5 +15,8 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.2"
     }
 }
