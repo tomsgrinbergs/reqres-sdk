@@ -12,5 +12,7 @@
             "email": "toms.grinbergs.lv@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    }
 }
