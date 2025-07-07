@@ -4,11 +4,18 @@ namespace Tomsgrinbergs\ReqresSdk\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
 
+/**
+ * @template T of BaseDTO
+ */
 abstract class BaseService
 {
     abstract protected string $path { get; }
+
+    /** @var class-string<T> */
+    abstract protected string $dtoClass { get; }
 
     protected Client $httpClient;
 
@@ -21,7 +28,8 @@ abstract class BaseService
         ]);
     }
 
-    public function get(int $id)
+    /** @return T */
+    public function get(int $id): BaseDTO
     {
         try {
             $response = $this->httpClient->get((string) $id);
@@ -31,7 +39,9 @@ abstract class BaseService
             exit;
         }
 
-        // TODO: use DTO
-        return json_decode($response->getBody()->getContents(), true);
+        /** @var array{ data: array<string, mixed> } $result */
+        $result = json_decode($response->getBody()->getContents(), true);
+
+        return new $this->dtoClass(...$result['data']);
     }
 }
