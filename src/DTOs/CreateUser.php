@@ -2,7 +2,7 @@
 
 namespace Tomsgrinbergs\ReqresSdk\DTOs;
 
-class CreateUser extends CreateDTO
+class CreateUser extends BaseDTO
 {
     public function __construct(
         public string $name,

@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Throwable;
 use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
-use Tomsgrinbergs\ReqresSdk\DTOs\CreateDTO;
 use Tomsgrinbergs\ReqresSdk\DTOs\PaginationDTO;
 use Tomsgrinbergs\ReqresSdk\Exceptions\ResourceNotFound;
 use Tomsgrinbergs\ReqresSdk\Exceptions\UnknownApiException;
@@ -14,7 +13,7 @@ use Tomsgrinbergs\ReqresSdk\Exceptions\UnknownApiException;
 /**
  * @template T of BaseDTO
  * @template TPagination of PaginationDTO<T>
- * @template TCreate of CreateDTO
+ * @template TCreate of BaseDTO
  */
 abstract class BaseService
 {
@@ -72,7 +71,7 @@ abstract class BaseService
     }
 
     /** @param TCreate $data */
-    public function create(CreateDTO $data): int
+    public function create(BaseDTO $data): int
     {
         /** @var array{ id: int } $result */
         $result = $this->request('POST', $this->path, [
