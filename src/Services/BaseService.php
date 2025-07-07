@@ -34,14 +34,16 @@ abstract class BaseService
     ) {
     }
 
-    /** @return T */
-    public function get(int $id): BaseDTO
+    /**
+     * @param array<string, mixed> $options
+     */
+    private function request(string $method, string $path, array $options = []): mixed
     {
         try {
-            $response = $this->httpClient->get("{$this->path}/{$id}");
+            $response = $this->httpClient->request($method, $path, $options);
         } catch (ClientException $e) {
             if ($e->getCode() === 404) {
-                throw new ResourceNotFound("Resource not found: {$this->path}/{$id}");
+                throw new ResourceNotFound("Resource not found: {$path}");
             }
 
             throw new UnknownApiException('An unexpected error occurred', previous: $e);
@@ -49,8 +51,14 @@ abstract class BaseService
             throw new UnknownApiException('An unexpected error occurred', previous: $e);
         }
 
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /** @return T */
+    public function get(int $id): BaseDTO
+    {
         /** @var array{ data: array<string, mixed> } $result */
-        $result = json_decode($response->getBody()->getContents(), true);
+        $result = $this->request('GET', "{$this->path}/{$id}");
 
         return $this->dtoClass::fromArray($result['data']);
     }
@@ -58,44 +66,20 @@ abstract class BaseService
     /** @return TPagination */
     public function all(int $page = 1): PaginationDTO
     {
-        try {
-            $response = $this->httpClient->get("{$this->path}", [
-                'query' => ['page' => $page],
-            ]);
-        } catch (ClientException $e) {
-            if ($e->getCode() === 404) {
-                throw new ResourceNotFound("Resource not found: {$this->path}");
-            }
-
-            throw new UnknownApiException('An unexpected error occurred', previous: $e);
-        } catch (Throwable $e) {
-            throw new UnknownApiException('An unexpected error occurred', previous: $e);
-        }
-
         /** @var array{ data: array<string, mixed> } $result */
-        $result = json_decode($response->getBody()->getContents(), true);
+        $result = $this->request('GET', $this->path, [
+            'query' => ['page' => $page],
+        ]);
 
         return $this->dtoPaginationClass::fromArray($result);
     }
 
     public function create(CreateDTO $data): int
     {
-        try {
-            $response = $this->httpClient->post("{$this->path}", [
-                'json' => $data->toArray(),
-            ]);
-        } catch (ClientException $e) {
-            if ($e->getCode() === 404) {
-                throw new ResourceNotFound("Resource not found: {$this->path}");
-            }
-
-            throw new UnknownApiException('An unexpected error occurred', previous: $e);
-        } catch (Throwable $e) {
-            throw new UnknownApiException('An unexpected error occurred', previous: $e);
-        }
-
         /** @var array{ id: int } $result */
-        $result = json_decode($response->getBody()->getContents(), true);
+        $result = $this->request('POST', $this->path, [
+            'json' => $data->toArray(),
+        ]);
 
         return $result['id'];
     }
