@@ -7,7 +7,7 @@ use Tomsgrinbergs\ReqresSdk\DTOs\User;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
 use Tomsgrinbergs\ReqresSdk\Services\UsersService;
 
-class UserServiceTest extends TestCase
+class UsersServiceTest extends TestCase
 {
     protected UsersService $usersService;
 
