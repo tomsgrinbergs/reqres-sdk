@@ -2,6 +2,7 @@
 
 namespace Tomsgrinbergs\ReqresSdk;
 
+use GuzzleHttp\Client;
 use Tomsgrinbergs\ReqresSdk\Services\UsersService;
 
 class ReqresClient
@@ -14,6 +15,11 @@ class ReqresClient
     public function __construct(
         public string $apiKey,
     ) {
-        $this->users = new UsersService($this);
+        $httpClient = new Client([
+            'base_uri' => "{$this->baseUrl}",
+            'headers' => ['x-api-key' => $this->apiKey],
+        ]);
+
+        $this->users = new UsersService($httpClient);
     }
 }

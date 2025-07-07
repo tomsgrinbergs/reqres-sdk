@@ -5,19 +5,21 @@ namespace Tests\Feature;
 use PHPUnit\Framework\TestCase;
 use Tomsgrinbergs\ReqresSdk\DTOs\User;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
+use Tomsgrinbergs\ReqresSdk\Services\UsersService;
 
 class UserServiceTest extends TestCase
 {
-    protected ReqresClient $client;
+    protected UsersService $usersService;
 
     protected function setUp(): void
     {
-        $this->client = new ReqresClient(getenv('REQRES_API_KEY'));
+        $client = new ReqresClient(getenv('REQRES_API_KEY'));
+        $this->usersService = $client->users;
     }
 
     public function test_it_can_get_a_user_by_id(): void
     {
-        $user = $this->client->users->get(1);
+        $user = $this->usersService->get(1);
 
         $this->assertInstanceOf(User::class, $user);
     }

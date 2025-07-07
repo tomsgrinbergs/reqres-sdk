@@ -20,22 +20,16 @@ abstract class BaseService
     /** @var class-string<T> */
     abstract protected string $dtoClass { get; }
 
-    protected Client $httpClient;
-
     public function __construct(
-        protected ReqresClient $client,
+        protected Client $httpClient,
     ) {
-        $this->httpClient = new Client([
-            'base_uri' => "{$this->client->baseUrl}{$this->path}/",
-            'headers' => ['x-api-key' => $this->client->apiKey],
-        ]);
     }
 
     /** @return T */
     public function get(int $id): BaseDTO
     {
         try {
-            $response = $this->httpClient->get((string) $id);
+            $response = $this->httpClient->get("{$this->path}/{$id}");
         } catch (ClientException $e) {
             // TODO: handle error properly
             var_dump($e->getRequest());
