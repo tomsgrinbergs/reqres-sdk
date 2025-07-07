@@ -24,7 +24,13 @@
     "scripts": {
         "test": "phpunit",
         "test:feature": "phpunit tests/Feature",
+        "check": "php-cs-fixer check",
         "fix": "php-cs-fixer fix",
-        "types": "phpstan analyse src --level=max"
+        "types": "phpstan analyse src --level=max",
+        "test:all": [
+            "@check",
+            "@types",
+            "@test"
+        ]
     }
 }
