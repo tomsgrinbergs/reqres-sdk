@@ -2,7 +2,6 @@
 
 namespace Tomsgrinbergs\ReqresSdk\DTOs;
 
-use CuyZ\Valinor\Mapper\MappingError;
 use CuyZ\Valinor\Mapper\Source\Source;
 use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Normalizer\Format;

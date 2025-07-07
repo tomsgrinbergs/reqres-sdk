@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use PHPUnit\Framework\TestCase;
 use Tests\FakeHttpClient;
 use Tomsgrinbergs\ReqresSdk\DTOs\CreateUser;
-use Tomsgrinbergs\ReqresSdk\DTOs\Pagination;
 use Tomsgrinbergs\ReqresSdk\DTOs\User;
 use Tomsgrinbergs\ReqresSdk\DTOs\UserPagination;
 use Tomsgrinbergs\ReqresSdk\Exceptions\ResourceNotFound;
