@@ -26,9 +26,6 @@ abstract class BaseService
     /** @var class-string<TPagination> */
     abstract protected string $dtoPaginationClass { get; }
 
-    /** @var class-string<TCreate> */
-    abstract protected string $dtoCreateClass { get; }
-
     public function __construct(
         protected Client $httpClient,
     ) {
@@ -74,6 +71,7 @@ abstract class BaseService
         return $this->dtoPaginationClass::fromArray($result);
     }
 
+    /** @param TCreate $data */
     public function create(CreateDTO $data): int
     {
         /** @var array{ id: int } $result */

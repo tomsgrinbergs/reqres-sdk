@@ -12,5 +12,4 @@ class UsersService extends BaseService
     protected string $path = 'users';
     protected string $dtoClass = User::class;
     protected string $dtoPaginationClass = UserPagination::class;
-    protected string $dtoCreateClass = CreateUser::class;
 }
