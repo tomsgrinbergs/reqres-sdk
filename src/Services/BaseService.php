@@ -7,7 +7,10 @@ use CuyZ\Valinor\Mapper\Source\Source;
 use CuyZ\Valinor\MapperBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Throwable;
 use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
+use Tomsgrinbergs\ReqresSdk\Exceptions\ResourceNotFound;
+use Tomsgrinbergs\ReqresSdk\Exceptions\UnknownApiException;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
 
 /**
@@ -31,9 +34,13 @@ abstract class BaseService
         try {
             $response = $this->httpClient->get("{$this->path}/{$id}");
         } catch (ClientException $e) {
-            // TODO: handle error properly
-            var_dump($e->getRequest());
-            exit;
+            if ($e->getCode() === 404) {
+                throw new ResourceNotFound("Resource not found: {$this->path}/{$id}");
+            }
+
+            throw new UnknownApiException('An unexpected error occurred', previous: $e);
+        } catch (Throwable $e) {
+            throw new UnknownApiException('An unexpected error occurred', previous: $e);
         }
 
         /** @var array{ data: array<string, mixed> } $result */
