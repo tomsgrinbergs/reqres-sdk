@@ -2,7 +2,7 @@
 
 namespace Tomsgrinbergs\ReqresSdk\DTOs;
 
-class User implements BaseDTO
+class User extends BaseDTO
 {
     public function __construct(
         public int $id,

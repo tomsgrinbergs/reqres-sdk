@@ -2,6 +2,9 @@
 
 namespace Tomsgrinbergs\ReqresSdk\Services;
 
+use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\Source\Source;
+use CuyZ\Valinor\MapperBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
@@ -42,6 +45,6 @@ abstract class BaseService
         /** @var array{ data: array<string, mixed> } $result */
         $result = json_decode($response->getBody()->getContents(), true);
 
-        return new $this->dtoClass(...$result['data']);
+        return $this->dtoClass::fromArray($result['data']);
     }
 }
