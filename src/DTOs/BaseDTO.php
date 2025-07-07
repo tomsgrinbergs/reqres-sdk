@@ -8,11 +8,16 @@ use CuyZ\Valinor\MapperBuilder;
 use CuyZ\Valinor\Normalizer\Format;
 use CuyZ\Valinor\NormalizerBuilder;
 use JsonSerializable;
+use Throwable;
+use Tomsgrinbergs\ReqresSdk\Exceptions\ErrorParsingResponse;
 use Tomsgrinbergs\ReqresSdk\Exceptions\UnableToSerializePayload;
 
 abstract class BaseDTO implements JsonSerializable
 {
-    /** @param array<mixed> $data */
+    /**
+     * @param array<mixed> $data
+     * @throws ErrorParsingResponse
+     */
     public static function fromArray(array $data): static
     {
         try {
@@ -20,20 +25,31 @@ abstract class BaseDTO implements JsonSerializable
                 ->allowSuperfluousKeys()
                 ->mapper()
                 ->map(static::class, Source::array($data));
-        } catch (MappingError $error) {
-            // TODO: handle error properly
-            var_dump($error);
-            exit;
+        } catch (Throwable $th) {
+            throw new ErrorParsingResponse(
+                "Error parsing response for " . static::class . ": " . $th->getMessage(),
+                previous: $th
+            );
         }
     }
 
-    /** @return array<mixed> */
+    /**
+     * @return array<mixed>
+     * @throws UnableToSerializePayload
+     */
     public function toArray(): array
     {
-        $normalizer = (new NormalizerBuilder())
-            ->normalizer(Format::array());
+        try {
+            $normalizer = (new NormalizerBuilder())
+                ->normalizer(Format::array());
 
-        $result = $normalizer->normalize($this);
+            $result = $normalizer->normalize($this);
+        } catch (Throwable $th) {
+            throw new UnableToSerializePayload(
+                "Error serializing payload for " . static::class . ": " . $th->getMessage(),
+                previous: $th
+            );
+        }
 
         if (!is_array($result)) {
             throw new UnableToSerializePayload();
@@ -42,7 +58,10 @@ abstract class BaseDTO implements JsonSerializable
         return $result;
     }
 
-    /** @return array<mixed> */
+    /**
+     * @return array<mixed>
+     * @throws UnableToSerializePayload
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
