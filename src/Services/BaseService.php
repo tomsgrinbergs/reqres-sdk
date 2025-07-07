@@ -9,12 +9,15 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Throwable;
 use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
+use Tomsgrinbergs\ReqresSdk\DTOs\Pagination;
+use Tomsgrinbergs\ReqresSdk\DTOs\PaginationDTO;
 use Tomsgrinbergs\ReqresSdk\Exceptions\ResourceNotFound;
 use Tomsgrinbergs\ReqresSdk\Exceptions\UnknownApiException;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
 
 /**
  * @template T of BaseDTO
+ * @template TPagination of PaginationDTO<T>
  */
 abstract class BaseService
 {
@@ -22,6 +25,9 @@ abstract class BaseService
 
     /** @var class-string<T> */
     abstract protected string $dtoClass { get; }
+
+    /** @var class-string<TPagination> */
+    abstract protected string $dtoPaginationClass { get; }
 
     public function __construct(
         protected Client $httpClient,
@@ -47,5 +53,28 @@ abstract class BaseService
         $result = json_decode($response->getBody()->getContents(), true);
 
         return $this->dtoClass::fromArray($result['data']);
+    }
+
+    /** @return TPagination */
+    public function all(int $page = 1): PaginationDTO
+    {
+        try {
+            $response = $this->httpClient->get("{$this->path}",[
+                'query' => ['page' => $page],
+            ]);
+        } catch (ClientException $e) {
+            if ($e->getCode() === 404) {
+                throw new ResourceNotFound("Resource not found: {$this->path}");
+            }
+
+            throw new UnknownApiException('An unexpected error occurred', previous: $e);
+        } catch (Throwable $e) {
+            throw new UnknownApiException('An unexpected error occurred', previous: $e);
+        }
+
+        /** @var array{ data: array<string, mixed> } $result */
+        $result = json_decode($response->getBody()->getContents(), true);
+
+        return $this->dtoPaginationClass::fromArray($result);
     }
 }

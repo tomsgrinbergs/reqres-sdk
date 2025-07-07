@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
 use Tomsgrinbergs\ReqresSdk\DTOs\User;
+use Tomsgrinbergs\ReqresSdk\DTOs\UserPagination;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
 use Tomsgrinbergs\ReqresSdk\Services\UsersService;
 
@@ -22,5 +23,20 @@ class UsersServiceTest extends TestCase
         $user = $this->usersService->get(1);
 
         $this->assertInstanceOf(User::class, $user);
+    }
+
+    public function test_it_can_get_all_users(): void
+    {
+        $users = $this->usersService->all();
+
+        $this->assertInstanceOf(UserPagination::class, $users);
+    }
+
+    public function test_it_can_get_2nd_page_of_all_users(): void
+    {
+        $users = $this->usersService->all(page: 2);
+
+        $this->assertInstanceOf(UserPagination::class, $users);
+        $this->assertEquals(2, $users->page);
     }
 }

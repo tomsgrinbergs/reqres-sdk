@@ -34,6 +34,18 @@ class FakeHttpClient extends HttpClient
         ]));
     }
 
+    public function pushPaginatedResponse(array $data, array $paginationData = []): void
+    {
+        $this->push(200, json_encode([
+            'data' => $data,
+            'page' => 1,
+            'per_page' => count($data),
+            'total' => count($data),
+            'total_pages' => 1,
+            ...$paginationData,
+        ]));
+    }
+
     public function pushNotFound(): void
     {
         $this->push(404);
