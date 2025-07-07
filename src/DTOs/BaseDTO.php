@@ -2,4 +2,6 @@
 
 namespace Tomsgrinbergs\ReqresSdk\DTOs;
 
-interface BaseDTO {}
+interface BaseDTO
+{
+}
