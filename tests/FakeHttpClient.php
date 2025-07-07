@@ -29,21 +29,7 @@ class FakeHttpClient extends HttpClient
 
     public function pushResponse(array $data): void
     {
-        $this->push(200, json_encode([
-            'data' => $data,
-        ]));
-    }
-
-    public function pushPaginatedResponse(array $data, array $paginationData = []): void
-    {
-        $this->push(200, json_encode([
-            'data' => $data,
-            'page' => 1,
-            'per_page' => count($data),
-            'total' => count($data),
-            'total_pages' => 1,
-            ...$paginationData,
-        ]));
+        $this->push(200, json_encode($data));
     }
 
     public function pushNotFound(): void

@@ -25,11 +25,13 @@ class UsersServiceTest extends TestCase
     public function test_it_can_get_a_user_by_id(): void
     {
         $this->client->pushResponse([
-            'id' => 1,
-            'email' => 'john.doe@example.com',
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'avatar' => 'https://example.com/avatars/image.jpeg',
+            'data' => [
+                'id' => 1,
+                'email' => 'john.doe@example.com',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'avatar' => 'https://example.com/avatars/image.jpeg',
+            ],
         ]);
 
         $user = $this->usersService->get(1);
@@ -44,22 +46,23 @@ class UsersServiceTest extends TestCase
 
     public function test_it_can_get_all_users(): void
     {
-        $this->client->pushPaginatedResponse([
-            [
-                'id' => 1,
-                'email' => 'john.doe@example.com',
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-                'avatar' => 'https://example.com/avatars/image.jpeg',
+        $this->client->pushResponse([
+            'data' => [
+                [
+                    'id' => 1,
+                    'email' => 'john.doe@example.com',
+                    'first_name' => 'John',
+                    'last_name' => 'Doe',
+                    'avatar' => 'https://example.com/avatars/image.jpeg',
+                ],
+                [
+                    'id' => 2,
+                    'email' => 'jane.doe@example.com',
+                    'first_name' => 'Jane',
+                    'last_name' => 'Doe',
+                    'avatar' => 'https://example.com/avatars/image2.jpeg',
+                ],
             ],
-            [
-                'id' => 2,
-                'email' => 'jane.doe@example.com',
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'avatar' => 'https://example.com/avatars/image2.jpeg',
-            ],
-        ], [
             'page' => 1,
             'per_page' => 10,
             'total' => 25,
@@ -78,8 +81,12 @@ class UsersServiceTest extends TestCase
 
     public function test_it_can_get_a_given_page_for_all_users(): void
     {
-        $this->client->pushPaginatedResponse([], [
+        $this->client->pushResponse([
+            'data' => [],
             'page' => 4,
+            'per_page' => 5,
+            'total' => 50,
+            'total_pages' => 10,
         ]);
 
         $users = $this->usersService->all(page: 4);

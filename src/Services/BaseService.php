@@ -54,7 +54,7 @@ abstract class BaseService
     public function all(int $page = 1): PaginationDTO
     {
         try {
-            $response = $this->httpClient->get("{$this->path}",[
+            $response = $this->httpClient->get("{$this->path}", [
                 'query' => ['page' => $page],
             ]);
         } catch (ClientException $e) {
