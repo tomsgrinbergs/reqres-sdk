@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
+use Tomsgrinbergs\ReqresSdk\DTOs\CreateUser;
 use Tomsgrinbergs\ReqresSdk\DTOs\User;
 use Tomsgrinbergs\ReqresSdk\DTOs\UserPagination;
 use Tomsgrinbergs\ReqresSdk\ReqresClient;
@@ -38,5 +39,15 @@ class UsersServiceTest extends TestCase
 
         $this->assertInstanceOf(UserPagination::class, $users);
         $this->assertEquals(2, $users->page);
+    }
+
+    public function test_it_can_add_a_user(): void
+    {
+        $userId = $this->usersService->create(new CreateUser(
+            name: 'John Doe',
+            job: 'Software Engineer',
+        ));
+
+        $this->assertIsInt($userId);
     }
 }

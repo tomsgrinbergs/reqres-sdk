@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
 use Tests\FakeHttpClient;
+use Tomsgrinbergs\ReqresSdk\DTOs\CreateUser;
 use Tomsgrinbergs\ReqresSdk\DTOs\Pagination;
 use Tomsgrinbergs\ReqresSdk\DTOs\User;
 use Tomsgrinbergs\ReqresSdk\DTOs\UserPagination;
@@ -92,6 +93,22 @@ class UsersServiceTest extends TestCase
         $users = $this->usersService->all(page: 4);
 
         $this->assertEquals(4, $users->page);
+    }
+
+    public function test_it_can_add_a_user(): void
+    {
+        $this->client->pushResponse([
+            'id' => 123,
+            'name' => 'John Doe',
+            'job' => 'Software Engineer',
+        ]);
+
+        $userId = $this->usersService->create(new CreateUser(
+            name: 'John Doe',
+            job: 'Software Engineer',
+        ));
+
+        $this->assertEquals(123, $userId);
     }
 
     public function test_it_throws_not_found_exception_when_user_not_found(): void
