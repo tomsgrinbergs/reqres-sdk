@@ -2,18 +2,13 @@
 
 namespace Tomsgrinbergs\ReqresSdk\Services;
 
-use CuyZ\Valinor\Mapper\MappingError;
-use CuyZ\Valinor\Mapper\Source\Source;
-use CuyZ\Valinor\MapperBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Throwable;
 use Tomsgrinbergs\ReqresSdk\DTOs\BaseDTO;
-use Tomsgrinbergs\ReqresSdk\DTOs\Pagination;
 use Tomsgrinbergs\ReqresSdk\DTOs\PaginationDTO;
 use Tomsgrinbergs\ReqresSdk\Exceptions\ResourceNotFound;
 use Tomsgrinbergs\ReqresSdk\Exceptions\UnknownApiException;
-use Tomsgrinbergs\ReqresSdk\ReqresClient;
 
 /**
  * @template T of BaseDTO
