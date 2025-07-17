@@ -7,7 +7,8 @@ use Tomsgrinbergs\ReqresSdk\ReqresClient;
 
 $reqres = new ReqresClient(getenv('REQRES_API_KEY'));
 
-function printExample(string $message, callable $callback): void {
+function printExample(string $message, callable $callback): void
+{
     echo $message . PHP_EOL;
     print_r($callback());
     echo PHP_EOL;
